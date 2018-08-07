@@ -1,0 +1,11 @@
+﻿@model IEnumerable<CarRental.Models.CarVm>
+
+@foreach (var car in Model)
+{
+    <tr>
+        <td>@car.Name</td>
+        <td>@car.Producer</td>
+        <td>@car.CarType</td>
+        <td>@car.Age</td>
+    </tr>
+}

@@ -1,0 +1,57 @@
+﻿@model IEnumerable<CarRental.Models.CarVm>
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>@ViewBag.ASDF</h2>
+
+@Html.ActionLink("Auto Erstellen", "Create", null, new { @class = "btn btn-default" })
+
+@if (Model != null)
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>@Html.LabelFor(m => m.First().Name)</th>
+                <th>@Html.LabelFor(m => m.First().Producer)</th>
+                <th>@Html.LabelFor(m => m.First().CarType)</th>
+                <th>@Html.LabelFor(m => m.First().Age)</th>
+            </tr>
+        </thead>
+        <tbody id="cars-area">
+        </tbody>
+    </table>
+}
+else
+{
+    <p>Leider keine Autos vorhanden...</p>
+}
+
+@*@Ajax.ActionLink("Mehr Autos laden", "GetMoreCars", "Cars",
+    new AjaxOptions()
+    {
+        HttpMethod = "GET",
+        AllowCache = false,
+        InsertionMode = InsertionMode.InsertAfter,
+        UpdateTargetId = "cars-area"
+    }, new { @class = "btn btn-success" });*@
+
+<button type="button" class="btn btn-danger" id="morecars">Mehr Autos laden</button>
+
+@section scripts {
+  @*  @Scripts.Render("~/bundles/ajax")*@    
+
+    <script>
+        var url = '@(Url.Action("GetMoreCars", "Cars", null, Request.Url.Scheme))';
+
+        $("button#morecars").on("click", () => {
+            $.ajax({
+                url: url,
+                type: 'GET'
+            })
+                .done((data) => $("#cars-area").append(data))
+                .fail((err) => console.log(err))
+                .always(() => console.log("Request completed..."));
+        });
+    </script>
+}
